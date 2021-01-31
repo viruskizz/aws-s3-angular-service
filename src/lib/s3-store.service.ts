@@ -1,9 +1,6 @@
 import {Inject, Injectable} from '@angular/core';
-import {S3} from '@aws-sdk/client-s3';
+import {DeleteObjectCommandOutput, HeadObjectCommandOutput, PutObjectCommandOutput, S3} from '@aws-sdk/client-s3';
 import {from, Observable, of, Subject} from 'rxjs';
-import {HeadObjectCommandOutput} from '@aws-sdk/client-s3/commands/HeadObjectCommand';
-import {PutObjectCommandOutput} from '@aws-sdk/client-s3/commands/PutObjectCommand';
-import {DeleteObjectCommandOutput} from '@aws-sdk/client-s3/commands/DeleteObjectCommand';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +13,7 @@ export class S3StoreService {
   public readonly defaultKey: string | undefined;
   public readonly uploadProgress = new Subject<any>();
 
-  constructor(@Inject('config') private config: S3ServiceConfig) {
+  constructor(@Inject('s3Config') private config: S3ServiceConfig) {
     this.s3 = new S3({
       apiVersion: config.apiVersion || 'latest',
       region: config.region,
