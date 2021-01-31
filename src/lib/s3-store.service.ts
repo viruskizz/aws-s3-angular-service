@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {S3} from '@aws-sdk/client-s3';
 import {from, Observable, of, Subject} from 'rxjs';
 import {HeadObjectCommandOutput} from '@aws-sdk/client-s3/commands/HeadObjectCommand';
@@ -16,7 +16,7 @@ export class S3StoreService {
   public readonly defaultKey: string | undefined;
   public readonly uploadProgress = new Subject<any>();
 
-  constructor(config: S3ServiceConfig) {
+  constructor(@Inject('config') private config: S3ServiceConfig) {
     this.s3 = new S3({
       apiVersion: config.apiVersion || 'latest',
       region: config.region,
@@ -30,7 +30,7 @@ export class S3StoreService {
     this.cdnUrl = config.cdnUrl;
   }
 
-  config(): any {
+  getConfig(): any {
     // Make sure tree shaking won't remove the lib during the build
     return {
       bucketName: this.bucketName,
